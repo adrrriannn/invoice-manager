@@ -20,7 +20,7 @@ class InvoiceControllerTest {
     @InjectMocks
     private lateinit var invoiceController: InvoiceController
 
-    private val invoiceId : Int = 1
+    private val invoiceId : Long = 1
 
     private val customerDto = CustomerDto(1, "customerName", "Customer Address")
 
