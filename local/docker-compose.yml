@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  invoicedb:
+    image: postgres:9.6-alpine
+    container_name: invoicedb
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adrrriannn -d invoice"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      POSTGRES_DB: "invoice"
+      POSTGRES_USER: "adrrriannn"
+      POSTGRES_PASSWORD: "adrrriannn"

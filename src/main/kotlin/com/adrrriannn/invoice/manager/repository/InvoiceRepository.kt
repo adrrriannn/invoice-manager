@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface InvoiceRepository: JpaRepository<Invoice, Long> {
 
-    fun findByIdOrNull(id: Long): Invoice? = findById(id).orElse(null)
+    fun findInvoiceById(id: Long): Invoice? = findById(id).orElse(null)
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 class InvoiceController(private val invoiceService: InvoiceService) {
 
     @PostMapping
-    fun create(invoiceDto: InvoiceDto): InvoiceDto = invoiceService.createInvoice(invoiceDto)
+    fun create(@RequestBody invoiceDto: InvoiceDto): InvoiceDto = invoiceService.createInvoice(invoiceDto)
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long): InvoiceDto = invoiceService.get(id)

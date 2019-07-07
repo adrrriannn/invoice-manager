@@ -1,3 +1,7 @@
 package com.adrrriannn.invoice.manager.entity
 
-data class Customer(internal val id: Long, val name: String, val address: String)
+import javax.persistence.*
+
+@Entity
+@Table(name = "customer")
+data class Customer(@Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long?, @Column val name: String, @Column val address: String)

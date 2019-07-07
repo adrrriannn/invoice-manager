@@ -2,8 +2,10 @@ package com.adrrriannn.invoice.manager.mapper
 
 import com.adrrriannn.invoice.manager.dto.InvoiceDto
 import com.adrrriannn.invoice.manager.entity.Invoice
+import org.springframework.stereotype.Component
 import java.util.stream.Collectors
 
+@Component
 class InvoiceMapperImpl(val customerMapper: CustomerMapper, val invoiceItemMapper: InvoiceItemMapper): InvoiceMapper {
     override fun map(invoiceDto: InvoiceDto): Invoice {
         return Invoice(

@@ -1,3 +1,7 @@
 package com.adrrriannn.invoice.manager.entity
 
-data class InvoiceItem(val id: Long, val description: String, val amount: Double)
+import javax.persistence.*
+
+@Entity
+@Table(name = "invoice_item")
+data class InvoiceItem(@Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long?, @Column val description: String, @Column val amount: Double)

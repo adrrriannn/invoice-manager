@@ -17,6 +17,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 
 class InvoiceServiceImplTest {
@@ -50,7 +51,7 @@ class InvoiceServiceImplTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         doReturn(invoice).`when`(invoiceRepository).save(invoice)
-        doReturn(invoice).`when`(invoiceRepository).findByIdOrNull(invoiceId)
+        doReturn(Optional.of(invoice)).`when`(invoiceRepository).findById(invoiceId)
         doReturn(invoice).`when`(invoiceMapper).map(invoiceDto)
         doReturn(invoiceDto).`when`(invoiceMapper).map(invoice)
     }
@@ -72,17 +73,17 @@ class InvoiceServiceImplTest {
 
         assertEquals(invoiceDto, foundInvoiceDto)
 
-        verify(invoiceRepository).findByIdOrNull(invoiceId)
+        verify(invoiceRepository).findById(invoiceId)
         verify(invoiceMapper).map(invoice)
 
     }
 
     @Test(expected = InvoiceNotFoundException::class)
     fun get_invoice_not_found() {
-        doReturn(null).`when`(invoiceRepository).findByIdOrNull(invoiceId)
+        doReturn(Optional.ofNullable(null)).`when`(invoiceRepository).findById(invoiceId)
         invoiceServiceImpl.get(invoiceId)
 
-        verify(invoiceRepository).findByIdOrNull(invoiceId)
+        verify(invoiceRepository).findById(invoiceId)
         verify(invoiceMapper).map(invoice)
 
     }
