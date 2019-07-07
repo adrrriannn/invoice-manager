@@ -1,5 +1,5 @@
 package com.adrrriannn.invoice.manager.entity
 
-class Invoice(id: Long, customer: Customer, items: List<Any>) {
+data class Invoice(val id: Long, val customer: Customer, val items: List<InvoiceItem>) {
 
 }

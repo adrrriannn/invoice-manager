@@ -34,7 +34,6 @@ class InvoiceServiceImplTest {
 
     private val invoiceId : Long = 1
 
-
     private val customerName = "customerName"
     private val address = "Customer Address"
     private val description = "description"
