@@ -1,5 +1,3 @@
 package com.adrrriannn.invoice.manager.entity
 
-class Customer(val id: Int, val name: String, val address: String) {
-
-}
+data class Customer(internal val id: Long, val name: String, val address: String)
