@@ -1,5 +1,3 @@
 package com.adrrriannn.invoice.manager.entity
 
-class InvoiceItem(id: Int, description: String, amount: Double) {
-
-}
+data class InvoiceItem(val id: Long, val description: String, val amount: Double)
