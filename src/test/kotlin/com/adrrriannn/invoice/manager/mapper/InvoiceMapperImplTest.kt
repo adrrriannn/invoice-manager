@@ -1,8 +1,10 @@
 package com.adrrriannn.invoice.manager.mapper
 
+import com.adrrriannn.invoice.manager.dto.AddressDto
 import com.adrrriannn.invoice.manager.dto.CustomerDto
 import com.adrrriannn.invoice.manager.dto.InvoiceDto
 import com.adrrriannn.invoice.manager.dto.InvoiceItemDto
+import com.adrrriannn.invoice.manager.entity.Address
 import com.adrrriannn.invoice.manager.entity.Customer
 import com.adrrriannn.invoice.manager.entity.Invoice
 import com.adrrriannn.invoice.manager.entity.InvoiceItem
@@ -28,11 +30,18 @@ class InvoiceMapperImplTest {
     private val invoiceId : Long = 1
 
     private val customerName = "customerName"
-    private val address = "Customer Address"
-
     private val description = "description"
-
     private val otherDescription = "other description"
+
+    private val firstLineAddress = "Customer Address"
+    private val secondLineAddress = "Customer Address"
+    private val city = "city"
+    private val country = "country"
+    private val postcode = "postcode"
+
+    private val address = Address(1, firstLineAddress, secondLineAddress, postcode, city, country)
+
+    private val addressDto = AddressDto(1, firstLineAddress, secondLineAddress, postcode, city, country)
 
     private val customer = Customer(1, customerName, address)
 
@@ -44,7 +53,7 @@ class InvoiceMapperImplTest {
 
     private val invoice = Invoice(invoiceId, customer, listOf(invoiceItem, otherInvoiceItem))
 
-    private val customerDto = CustomerDto(1, customerName, address)
+    private val customerDto = CustomerDto(1, customerName, addressDto)
 
     private val invoiceItemDto = InvoiceItemDto(1, description, amount)
     private val otherInvoiceItemDto = InvoiceItemDto(2, otherDescription, otherAmount)

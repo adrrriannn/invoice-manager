@@ -1,5 +1,6 @@
 package com.adrrriannn.invoice.manager.controller
 
+import com.adrrriannn.invoice.manager.dto.AddressDto
 import com.adrrriannn.invoice.manager.dto.CustomerDto
 import com.adrrriannn.invoice.manager.dto.InvoiceDto
 import com.adrrriannn.invoice.manager.dto.InvoiceItemDto
@@ -22,7 +23,15 @@ class InvoiceControllerTest {
 
     private val invoiceId : Long = 1
 
-    private val customerDto = CustomerDto(1, "customerName", "Customer Address")
+    private val firstLineAddress = "Customer Address"
+    private val secondLineAddress = "Customer Address"
+    private val city = "city"
+    private val country = "country"
+    private val postcode = "postcode"
+
+    private val address = AddressDto(1, firstLineAddress, secondLineAddress, postcode, city, country)
+
+    private val customerDto = CustomerDto(1, "customerName", address)
 
     private val invoiceItem = InvoiceItemDto(1, "description", 345.23)
 
