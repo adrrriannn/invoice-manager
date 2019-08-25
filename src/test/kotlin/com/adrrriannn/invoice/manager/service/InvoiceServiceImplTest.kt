@@ -9,6 +9,7 @@ import com.adrrriannn.invoice.manager.entity.Customer
 import com.adrrriannn.invoice.manager.entity.Invoice
 import com.adrrriannn.invoice.manager.entity.InvoiceItem
 import com.adrrriannn.invoice.manager.exception.InvoiceNotFoundException
+import com.adrrriannn.invoice.manager.filter.InvoiceSearchFilter
 import com.adrrriannn.invoice.manager.mapper.InvoiceMapper
 import com.adrrriannn.invoice.manager.repository.InvoiceRepository
 import org.junit.Assert.assertEquals
@@ -63,6 +64,7 @@ class InvoiceServiceImplTest {
         doReturn(invoice).`when`(invoiceRepository).findInvoiceById(invoiceId)
         doReturn(invoice).`when`(invoiceMapper).map(invoiceDto)
         doReturn(invoiceDto).`when`(invoiceMapper).map(invoice)
+        doReturn(listOf(invoice)).`when`(invoiceRepository).findAll()
     }
 
     @Test
@@ -96,5 +98,17 @@ class InvoiceServiceImplTest {
         verify(invoiceRepository).findInvoiceById(invoiceId)
         verify(invoiceMapper).map(invoice)
 
+    }
+
+    @Test
+    fun get_all_invoices() {
+
+        var invoiceSearchFilter = InvoiceSearchFilter()
+
+        val invoices = invoiceServiceImpl.getInvoicesByFilter(invoiceSearchFilter)
+
+        assertEquals(listOf(invoiceDto), invoices)
+        verify(invoiceRepository).findAll()
+        var invoice = Invoice()
     }
 }

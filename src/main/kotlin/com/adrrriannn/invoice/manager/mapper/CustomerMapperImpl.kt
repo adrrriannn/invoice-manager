@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomerMapperImpl(private val addressMapper: AddressMapper): CustomerMapper {
-    override fun map(customerDto: CustomerDto): Customer {
-        return Customer(id = customerDto.id, name = customerDto.name, address = addressMapper.map(customerDto.address))
-    }
+    override fun map(customerDto: CustomerDto?): Customer = Customer(id = customerDto?.id,
+                                                                     name = customerDto?.name,
+                                                                     address = addressMapper.map(customerDto?.address))
 
-    override fun map(customer: Customer): CustomerDto {
-        return CustomerDto(id = customer.id, name = customer.name, address = addressMapper.map(customer.address))
-    }
+    override fun map(customer: Customer?): CustomerDto = CustomerDto(id = customer?.id,
+                                                                     name = customer?.name,
+                                                                     address = addressMapper.map(customer?.address))
 
 }

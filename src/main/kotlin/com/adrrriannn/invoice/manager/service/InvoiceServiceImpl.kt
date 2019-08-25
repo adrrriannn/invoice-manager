@@ -1,10 +1,13 @@
 package com.adrrriannn.invoice.manager.service
 
 import com.adrrriannn.invoice.manager.dto.InvoiceDto
+import com.adrrriannn.invoice.manager.entity.Invoice
 import com.adrrriannn.invoice.manager.exception.InvoiceNotFoundException
+import com.adrrriannn.invoice.manager.filter.InvoiceSearchFilter
 import com.adrrriannn.invoice.manager.mapper.InvoiceMapper
 import com.adrrriannn.invoice.manager.repository.InvoiceRepository
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 
 @Service
 class InvoiceServiceImpl(private val invoiceMapper: InvoiceMapper, private val invoiceRepository: InvoiceRepository): InvoiceService {
@@ -23,4 +26,8 @@ class InvoiceServiceImpl(private val invoiceMapper: InvoiceMapper, private val i
                 .let { invoice -> invoiceMapper.map(invoice) }
     }
 
+    override fun getInvoicesByFilter(invoiceSearchFilter: InvoiceSearchFilter): List<InvoiceDto> {
+        return invoiceRepository.findAll()
+                .map { invoice -> invoiceMapper.map(invoice) }
+    }
 }
