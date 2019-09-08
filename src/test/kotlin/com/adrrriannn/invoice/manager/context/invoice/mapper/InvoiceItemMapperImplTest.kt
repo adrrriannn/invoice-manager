@@ -1,33 +1,31 @@
 package com.adrrriannn.invoice.manager.context.invoice.mapper
 
-import com.adrrriannn.invoice.manager.context.invoice.mapper.InvoiceItemMapperImpl
-import com.adrrriannn.invoice.manager.context.invoice.dto.InvoiceItemDto
-import com.adrrriannn.invoice.manager.context.invoice.domain.InvoiceItem
-import org.junit.Assert.assertEquals
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceItemDtoStub
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceItemStub
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class InvoiceItemMapperImplTest {
 
     private val invoiceItemMapperImpl = InvoiceItemMapperImpl()
-    private val description = "description"
-
-    private val amount = 345.23
-
-    private val invoiceItem = InvoiceItem(1, description, amount)
-
-    private val invoiceItemDto = InvoiceItemDto(1, description, amount)
 
     @Test
     fun map_to_dto() {
-        val mappedDto = invoiceItemMapperImpl.map(invoiceItem)
+        val invoiceItem = InvoiceItemStub.random()
+        val result = invoiceItemMapperImpl.map(invoiceItem)
 
-        assertEquals(invoiceItemDto, mappedDto)
+        assertThat(result.id).isEqualTo(invoiceItem.id)
+        assertThat(result.description).isEqualTo(invoiceItem.description)
+        assertThat(result.amount).isEqualTo(invoiceItem.amount)
     }
 
     @Test
     fun map_to_entity() {
-        val mappedEntity = invoiceItemMapperImpl.map(invoiceItemDto)
+        val invoiceItemDto = InvoiceItemDtoStub.random()
+        val result = invoiceItemMapperImpl.map(invoiceItemDto)
 
-        assertEquals(invoiceItem, mappedEntity)
+        assertThat(result.id).isEqualTo(invoiceItemDto.id)
+        assertThat(result.description).isEqualTo(invoiceItemDto.description)
+        assertThat(result.amount).isEqualTo(invoiceItemDto.amount)
     }
 }

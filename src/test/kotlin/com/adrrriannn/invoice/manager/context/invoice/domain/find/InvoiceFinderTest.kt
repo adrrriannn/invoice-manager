@@ -1,86 +1,48 @@
 package com.adrrriannn.invoice.manager.context.invoice.domain.find
 
-import com.adrrriannn.invoice.manager.context.address.domain.Address
-import com.adrrriannn.invoice.manager.context.address.dto.AddressDto
-import com.adrrriannn.invoice.manager.context.customer.domain.Customer
-import com.adrrriannn.invoice.manager.context.customer.dto.CustomerDto
-import com.adrrriannn.invoice.manager.context.invoice.domain.Invoice
-import com.adrrriannn.invoice.manager.context.invoice.domain.InvoiceItem
-import com.adrrriannn.invoice.manager.context.invoice.dto.InvoiceDto
-import com.adrrriannn.invoice.manager.context.invoice.dto.InvoiceItemDto
 import com.adrrriannn.invoice.manager.context.invoice.infrastructure.repository.InvoiceRepository
 import com.adrrriannn.invoice.manager.context.invoice.mapper.InvoiceMapper
-import org.junit.Assert
-import org.junit.Before
+import com.adrrriannn.invoice.manager.stub.common.LongStub
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceDtoStub
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceStub
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 
 class InvoiceFinderTest {
-    @Mock
-    private lateinit var invoiceRepository: InvoiceRepository
+    private val invoiceRepository: InvoiceRepository = mockk()
 
-    @Mock
-    private lateinit var invoiceMapper: InvoiceMapper
+    private val invoiceMapper: InvoiceMapper = mockk()
 
-    @InjectMocks
-    private lateinit var invoiceFinder: InvoiceFinderImpl
-
-    private val invoiceId : Long = 1
-
-    private val customerName = "customerName"
-    private val description = "description"
-
-    private val firstLineAddress = "Customer Address"
-    private val secondLineAddress = "Customer Address"
-    private val city = "city"
-    private val country = "country"
-    private val postcode = "postcode"
-
-    private val address = Address(1, firstLineAddress, secondLineAddress, postcode, city, country)
-    private val addressDto = AddressDto(1, firstLineAddress, secondLineAddress, postcode, city, country)
-
-    private val customer = Customer(1, customerName, address)
-    private val amount = 345.23
-
-    private val invoiceItem = InvoiceItem(1, description, amount)
-    private val invoice = Invoice(invoiceId, customer, listOf(invoiceItem))
-
-    private val customerDto = CustomerDto(1, customerName, addressDto)
-    private val invoiceItemDto = InvoiceItemDto(1, description, amount)
-    private val invoiceDto = InvoiceDto(invoiceId, customerDto, listOf(invoiceItemDto))
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        Mockito.doReturn(invoice).`when`(invoiceRepository).save(invoice)
-        Mockito.doReturn(invoice).`when`(invoiceRepository).findInvoiceById(invoiceId)
-        Mockito.doReturn(invoice).`when`(invoiceMapper).map(invoiceDto)
-        Mockito.doReturn(invoiceDto).`when`(invoiceMapper).map(invoice)
-        Mockito.doReturn(listOf(invoice)).`when`(invoiceRepository).findAll()
-    }
+    private val invoiceFinder = InvoiceFinderImpl(invoiceRepository, invoiceMapper)
 
     @Test
     fun get_invoice() {
-        Mockito.doReturn(invoice).`when`(invoiceRepository).findInvoiceById(invoiceId)
-        var foundInvoiceDto = invoiceFinder(invoiceId)
+        val invoiceId = LongStub.random()
+        val invoice = InvoiceStub.random()
 
-        Assert.assertEquals(invoiceDto, foundInvoiceDto)
+        every { invoiceRepository.findInvoiceById(invoiceId) } returns invoice
 
-        Mockito.verify(invoiceRepository).findInvoiceById(invoiceId)
-        Mockito.verify(invoiceMapper).map(invoice)
+        val invoiceDto = InvoiceDtoStub.random()
+        every { invoiceMapper.map(invoice) } returns invoiceDto
+
+        var result = invoiceFinder(invoiceId)
+
+
+        assertThat(result).isEqualTo(invoiceDto)
+
+        verify { invoiceRepository.findInvoiceById(invoiceId) }
+        verify { invoiceMapper.map(invoice) }
 
     }
 
     @Test(expected = InvoiceNotFoundException::class)
     fun get_invoice_not_found() {
-        Mockito.doReturn(null).`when`(invoiceRepository).findInvoiceById(invoiceId)
+        val invoiceId = LongStub.random()
+        every { invoiceRepository.findInvoiceById(invoiceId) } returns null
+
         invoiceFinder(invoiceId)
-
-        Mockito.verify(invoiceRepository).findInvoiceById(invoiceId)
-        Mockito.verify(invoiceMapper).map(invoice)
-
     }
 }

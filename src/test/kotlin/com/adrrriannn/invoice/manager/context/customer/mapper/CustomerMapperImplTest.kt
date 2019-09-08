@@ -1,59 +1,56 @@
 package com.adrrriannn.invoice.manager.context.customer.mapper
 
 import com.adrrriannn.invoice.manager.context.address.mapper.AddressMapper
-import com.adrrriannn.invoice.manager.context.customer.mapper.CustomerMapperImpl
-import com.adrrriannn.invoice.manager.context.address.dto.AddressDto
-import com.adrrriannn.invoice.manager.context.customer.dto.CustomerDto
-import com.adrrriannn.invoice.manager.context.address.domain.Address
-import com.adrrriannn.invoice.manager.context.customer.domain.Customer
-import org.junit.Assert.assertEquals
+import com.adrrriannn.invoice.manager.stub.address.AddressDtoStub
+import com.adrrriannn.invoice.manager.stub.address.AddressStub
+import com.adrrriannn.invoice.manager.stub.customer.CustomerDtoStub
+import com.adrrriannn.invoice.manager.stub.customer.CustomerStub
+import io.mockk.every
+import io.mockk.mockk
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.doReturn
-import org.mockito.MockitoAnnotations
 
 class CustomerMapperImplTest {
 
-    @Mock
-    private lateinit var addressMapper: AddressMapper
+    private val addressMapper: AddressMapper = mockk()
 
-    @InjectMocks
-    private lateinit var customerMapperImpl: CustomerMapperImpl
-
-    private val customerName = "customerName"
-    private val firstLineAddress = "Customer Address"
-    private val secondLineAddress = "Customer Address"
-    private val city = "city"
-    private val country = "country"
-    private val postcode = "postcode"
-
-    private val address = Address(1, firstLineAddress, secondLineAddress, postcode, city, country)
-
-    private val addressDto = AddressDto(1, firstLineAddress, secondLineAddress, postcode, city, country)
-
-    private val customerDto = CustomerDto(1, customerName, addressDto)
-    private val customer = Customer(1, customerName, address)
+    private val customerMapperImpl = CustomerMapperImpl(addressMapper)
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        doReturn(address).`when`(addressMapper).map(addressDto)
-        doReturn(addressDto).`when`(addressMapper).map(address)
     }
 
     @Test
     fun map_to_dto() {
-        val mappedDto = customerMapperImpl.map(customer)
 
-        assertEquals(customerDto, mappedDto)
+        val address = AddressStub.random()
+        val addressDto = AddressDtoStub.random()
+
+        every { addressMapper.map(address) } returns addressDto
+
+        val customer = CustomerStub.random(address = address)
+
+        val result = customerMapperImpl.map(customer)
+
+        assertThat(result.id).isEqualTo(customer.id)
+        assertThat(result.name).isEqualTo(customer.name)
+        assertThat(result.address).isEqualTo(addressDto)
     }
 
     @Test
     fun map_to_entity() {
-        val mappedEntity = customerMapperImpl.map(customerDto)
+        val addressDto = AddressDtoStub.random()
+        val address = AddressStub.random()
 
-        assertEquals(customer, mappedEntity)
+        every { addressMapper.map(addressDto) } returns address
+
+        val customerDto = CustomerDtoStub.random(address = addressDto)
+
+        val result = customerMapperImpl.map(customerDto)
+
+        assertThat(result.id).isEqualTo(customerDto.id)
+        assertThat(result.name).isEqualTo(customerDto.name)
+        assertThat(result.address).isEqualTo(address)
     }
 }

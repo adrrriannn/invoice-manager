@@ -18,7 +18,7 @@ class InvoiceController(val invoiceCreator: InvoiceCreator, val invoiceFinder: I
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long): InvoiceDto = invoiceFinder(id)
 
-    @GetMapping
-    fun getAll(@RequestBody(required = false) filter: InvoiceSearchFilter = InvoiceSearchFilter()): List<InvoiceDto> = invoiceSearcher(filter)
+    @PostMapping("/search")
+    fun getAll(@RequestBody(required = false) filter: InvoiceSearchFilter? = InvoiceSearchFilter()): List<InvoiceDto> = invoiceSearcher(filter!!)
 
 }

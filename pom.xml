@@ -28,6 +28,9 @@
 		<kotlin.version>1.2.71</kotlin.version>
 		<r2dbc-spi.version>1.0.0.M6</r2dbc-spi.version>
 		<spring-data-r2dbc.version>1.0.0.M2</spring-data-r2dbc.version>
+		<mockk.version>1.9.3</mockk.version>
+		<assertj-core.version>3.13.2</assertj-core.version>
+		<javafaker.version>1.0.1</javafaker.version>
 	</properties>
 
 	<dependencies>
@@ -66,10 +69,23 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
+			<groupId>io.mockk</groupId>
+			<artifactId>mockk</artifactId>
+			<version>${mockk.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj-core.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>${javafaker.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

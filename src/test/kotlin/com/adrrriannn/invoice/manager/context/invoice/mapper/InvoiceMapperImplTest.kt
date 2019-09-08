@@ -1,93 +1,68 @@
 package com.adrrriannn.invoice.manager.context.invoice.mapper
 
 import com.adrrriannn.invoice.manager.context.customer.mapper.CustomerMapper
-import com.adrrriannn.invoice.manager.context.address.dto.AddressDto
-import com.adrrriannn.invoice.manager.context.customer.dto.CustomerDto
-import com.adrrriannn.invoice.manager.context.invoice.dto.InvoiceDto
-import com.adrrriannn.invoice.manager.context.invoice.mapper.InvoiceItemMapper
-import com.adrrriannn.invoice.manager.context.invoice.mapper.InvoiceMapperImpl
-import com.adrrriannn.invoice.manager.context.invoice.dto.InvoiceItemDto
-import com.adrrriannn.invoice.manager.context.address.domain.Address
-import com.adrrriannn.invoice.manager.context.customer.domain.Customer
-import com.adrrriannn.invoice.manager.context.invoice.domain.Invoice
-import com.adrrriannn.invoice.manager.context.invoice.domain.InvoiceItem
-import org.junit.Assert.assertEquals
-import org.junit.Before
+import com.adrrriannn.invoice.manager.stub.customer.CustomerDtoStub
+import com.adrrriannn.invoice.manager.stub.customer.CustomerStub
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceDtoStub
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceItemDtoStub
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceItemStub
+import com.adrrriannn.invoice.manager.stub.invoice.InvoiceStub
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.doReturn
-import org.mockito.MockitoAnnotations
 
 class InvoiceMapperImplTest {
 
-    @Mock
-    private lateinit var customerMapper: CustomerMapper
+    private val customerMapper: CustomerMapper = mockk()
 
-    @Mock
-    private lateinit var invoiceItemMapper: InvoiceItemMapper
+    private val invoiceItemMapper: InvoiceItemMapper = mockk()
 
-    @InjectMocks
-    private lateinit var invoiceMapperImpl: InvoiceMapperImpl
-
-    private val invoiceId : Long = 1
-
-    private val customerName = "customerName"
-    private val description = "description"
-    private val otherDescription = "other description"
-
-    private val firstLineAddress = "Customer Address"
-    private val secondLineAddress = "Customer Address"
-    private val city = "city"
-    private val country = "country"
-    private val postcode = "postcode"
-
-    private val address = Address(1, firstLineAddress, secondLineAddress, postcode, city, country)
-
-    private val addressDto = AddressDto(1, firstLineAddress, secondLineAddress, postcode, city, country)
-
-    private val customer = Customer(1, customerName, address)
-
-    private val amount = 345.23
-    private val otherAmount = 288.8
-
-    private val invoiceItem = InvoiceItem(1, description, amount)
-    private val otherInvoiceItem = InvoiceItem(2, otherDescription, otherAmount)
-
-    private val invoice = Invoice(invoiceId, customer, listOf(invoiceItem, otherInvoiceItem))
-
-    private val customerDto = CustomerDto(1, customerName, addressDto)
-
-    private val invoiceItemDto = InvoiceItemDto(1, description, amount)
-    private val otherInvoiceItemDto = InvoiceItemDto(2, otherDescription, otherAmount)
-
-    private val invoiceDto = InvoiceDto(invoiceId, customerDto, listOf(invoiceItemDto, otherInvoiceItemDto))
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        doReturn(customer).`when`(customerMapper).map(customerDto)
-        doReturn(customerDto).`when`(customerMapper).map(customer)
-
-        doReturn(invoiceItem).`when`(invoiceItemMapper).map(invoiceItemDto)
-        doReturn(otherInvoiceItem).`when`(invoiceItemMapper).map(otherInvoiceItemDto)
-
-        doReturn(invoiceItemDto).`when`(invoiceItemMapper).map(invoiceItem)
-        doReturn(otherInvoiceItemDto).`when`(invoiceItemMapper).map(otherInvoiceItem)
-    }
+    private val invoiceMapperImpl = InvoiceMapperImpl(customerMapper, invoiceItemMapper)
 
     @Test
     fun map_to_dto() {
-        val mappedDto = invoiceMapperImpl.map(invoice)
+        val customer = CustomerStub.random()
+        val invoiceItem = InvoiceItemStub.random()
+        val invoice = InvoiceStub.random(customer = customer, items = listOf(invoiceItem))
 
-        assertEquals(invoiceDto, mappedDto)
+        val invoiceItemDto = InvoiceItemDtoStub.random()
+        every { invoiceItemMapper.map(invoiceItem) } returns invoiceItemDto
+
+        val customerDto = CustomerDtoStub.random()
+        every { customerMapper.map(customer) } returns customerDto
+
+        val result = invoiceMapperImpl.map(invoice)
+
+        assertThat(result.id).isEqualTo(invoice.id)
+        assertThat(result.customer).isEqualTo(customerDto)
+        assertThat(result.items).isEqualTo(listOf(invoiceItemDto))
+
+        verify(exactly = 1) { customerMapper.map(customer) }
+        verify(exactly = 1) { invoiceItemMapper.map(invoiceItem) }
     }
 
     @Test
     fun map_to_entity() {
-        val mappedEntity = invoiceMapperImpl.map(invoiceDto)
+        val customerDto = CustomerDtoStub.random()
+        val invoiceItemDto = InvoiceItemDtoStub.random()
+        val invoiceDto = InvoiceDtoStub.random(customer = customerDto, items = listOf(invoiceItemDto))
 
-        assertEquals(invoice, mappedEntity)
+        val invoiceItem = InvoiceItemStub.random()
+        every { invoiceItemMapper.map(invoiceItemDto) } returns invoiceItem
+
+        val customer = CustomerStub.random()
+        every { customerMapper.map(customerDto) } returns customer
+
+        val result = invoiceMapperImpl.map(invoiceDto)
+
+        assertThat(result.id).isEqualTo(invoiceDto.id)
+        assertThat(result.customer).isEqualTo(customer)
+        assertThat(result.items).isEqualTo(listOf(invoiceItem))
+
+        verify(exactly = 1) { customerMapper.map(customerDto) }
+        verify(exactly = 1) { invoiceItemMapper.map(invoiceItemDto) }
     }
 
 }
