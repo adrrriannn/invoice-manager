@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component
 class InvoiceItemMapperImpl: InvoiceItemMapper {
     override fun map(invoiceItemDto: InvoiceItemDto?): InvoiceItem = InvoiceItem(id = invoiceItemDto?.id,
             description = invoiceItemDto?.description,
-            amount = invoiceItemDto?.amount)
+            price = invoiceItemDto?.price,
+            quantity = invoiceItemDto?.quantity)
 
 
     override fun map(invoiceItem: InvoiceItem?): InvoiceItemDto = InvoiceItemDto(id = invoiceItem?.id,
             description = invoiceItem?.description,
-            amount = invoiceItem?.amount)
+            price = invoiceItem?.price,
+            quantity = invoiceItem?.quantity)
 
 }

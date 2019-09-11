@@ -16,7 +16,8 @@ class InvoiceItemMapperImplTest {
 
         assertThat(result.id).isEqualTo(invoiceItem.id)
         assertThat(result.description).isEqualTo(invoiceItem.description)
-        assertThat(result.amount).isEqualTo(invoiceItem.amount)
+        assertThat(result.quantity).isEqualTo(invoiceItem.quantity)
+        assertThat(result.price).isEqualTo(invoiceItem.price)
     }
 
     @Test
@@ -26,6 +27,7 @@ class InvoiceItemMapperImplTest {
 
         assertThat(result.id).isEqualTo(invoiceItemDto.id)
         assertThat(result.description).isEqualTo(invoiceItemDto.description)
-        assertThat(result.amount).isEqualTo(invoiceItemDto.amount)
+        assertThat(result.quantity).isEqualTo(invoiceItemDto.quantity)
+        assertThat(result.price).isEqualTo(invoiceItemDto.price)
     }
 }
