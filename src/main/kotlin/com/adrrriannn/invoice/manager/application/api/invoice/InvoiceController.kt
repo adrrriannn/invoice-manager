@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/invoices")
-@CrossOrigin("http://localhost:3000")
 class InvoiceController(val invoiceCreator: InvoiceCreator, val invoiceFinder: InvoiceFinder, val invoiceSearcher: InvoiceSearcher) {
 
     @PostMapping
