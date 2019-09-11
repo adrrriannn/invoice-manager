@@ -25,9 +25,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<kotlin.version>1.2.71</kotlin.version>
-		<r2dbc-spi.version>1.0.0.M6</r2dbc-spi.version>
-		<spring-data-r2dbc.version>1.0.0.M2</spring-data-r2dbc.version>
+		<kotlin.version>1.3.50</kotlin.version>
 		<mockk.version>1.9.3</mockk.version>
 		<assertj-core.version>3.13.2</assertj-core.version>
 		<javafaker.version>1.0.1</javafaker.version>
