@@ -1,4 +1,4 @@
-package com.adrrriannn.invoice.manager.application.api
+package com.adrrriannn.invoice.manager.application.api.invoice
 
 import com.adrrriannn.invoice.manager.application.api.invoice.InvoiceController
 import com.adrrriannn.invoice.manager.context.invoice.domain.create.InvoiceCreator
