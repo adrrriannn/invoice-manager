@@ -29,7 +29,7 @@
 		<mockk.version>1.9.3</mockk.version>
 		<assertj-core.version>3.13.2</assertj-core.version>
 		<javafaker.version>1.0.1</javafaker.version>
-		<h2.version>1.4.199</h2.version>
+		<h2.version>2.1.210</h2.version>
 		<rest-assured.version>2.9.0</rest-assured.version>
 	</properties>
 
